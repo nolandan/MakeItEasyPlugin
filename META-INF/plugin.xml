@@ -1,0 +1,46 @@
+<idea-plugin version="2">
+  <id>uk.co.neylan.plugins.makeiteasy</id>
+  <name>Make-It-Easy Plugin</name>
+  <version>1.0</version>
+  <vendor email="plugins@neylan.co.uk" url="http://www.neylan.co.uk">Neylan Consulting</vendor>
+
+  <description><![CDATA[
+        A code-generator for <a href="https://code.google.com/p/make-it-easy/">Make-It-Easy Makers</a>
+
+        Thanks to Michal Jedynak as much of this is based on his Builder Generator
+    ]]>
+  </description>
+
+  <change-notes><![CDATA[
+        Initial version
+    ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+    <application-components>
+    </application-components>
+
+    <project-components>
+    </project-components>
+
+    <actions>
+        <action id="GoToMaker" class="uk.co.neylan.plugins.makeiteasy.main.GoToMakerAction"
+                text="Maker" description="Generates Maker">
+            <add-to-group group-id="GoToCodeGroup" anchor="after" relative-to-action="GotoTest"/>
+            <add-to-group group-id="EditorPopupMenu.GoTo" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta M"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+
+</idea-plugin>
