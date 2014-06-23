@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.writer;
+package uk.co.neylan.plugins.makeiteasy.writer;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;

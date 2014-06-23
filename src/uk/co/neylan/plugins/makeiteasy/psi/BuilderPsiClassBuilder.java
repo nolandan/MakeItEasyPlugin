@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.psi;
+package uk.co.neylan.plugins.makeiteasy.psi;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaDirectoryService;
@@ -13,7 +13,9 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.apache.commons.lang.StringUtils;
-import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForBuilder;
+import pl.mjedynak.idea.plugins.builder.psi.MethodNameCreator;
+import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
+import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
 
 import java.util.List;
 import java.util.Locale;
@@ -50,7 +52,7 @@ public class BuilderPsiClassBuilder {
         this.psiHelper = psiHelper;
     }
 
-    public BuilderPsiClassBuilder aBuilder(Project project, PsiDirectory targetDirectory, PsiClass psiClass, String builderClassName, PsiFieldsForBuilder psiFieldsForBuilder) {
+    public BuilderPsiClassBuilder aBuilder(Project project, PsiDirectory targetDirectory, PsiClass psiClass, String builderClassName, PsiFieldsForMaker psiFieldsForMaker) {
         this.project = project;
         this.targetDirectory = targetDirectory;
         this.srcClass = psiClass;
@@ -61,8 +63,8 @@ public class BuilderPsiClassBuilder {
         elementFactory = javaPsiFacade.getElementFactory();
         srcClassName = psiClass.getName();
         srcClassFieldName = StringUtils.uncapitalize(srcClassName);
-        psiFieldsForSetters = psiFieldsForBuilder.getFieldsForSetters();
-        psiFieldsForConstructor = psiFieldsForBuilder.getFieldsForConstructor();
+        psiFieldsForSetters = psiFieldsForMaker.getFieldsForSetters();
+        psiFieldsForConstructor = psiFieldsForMaker.getFieldsForConstructor();
         return this;
     }
 

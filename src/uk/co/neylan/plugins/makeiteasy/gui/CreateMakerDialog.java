@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.gui;
+package uk.co.neylan.plugins.makeiteasy.gui;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -18,6 +18,7 @@ import com.intellij.ui.RecentsManager;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import pl.mjedynak.idea.plugins.builder.factory.PackageChooserDialogFactory;
 import pl.mjedynak.idea.plugins.builder.factory.ReferenceEditorComboWithBrowseButtonFactory;
+import pl.mjedynak.idea.plugins.builder.gui.ChooserDisplayerActionListener;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 
@@ -28,9 +29,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
-public class CreateBuilderDialog extends DialogWrapper {
+public class CreateMakerDialog extends DialogWrapper {
 
-    static final String RECENTS_KEY = "CreateBuilderDialog.RecentsKey";
+    static final String RECENTS_KEY = "CreateMakerDialog.RecentsKey";
     private static final int WIDTH = 40;
 
     private PsiHelper psiHelper;
@@ -42,15 +43,15 @@ public class CreateBuilderDialog extends DialogWrapper {
     private JTextField targetMethodPrefix;
     private ReferenceEditorComboWithBrowseButton targetPackageField;
 
-    public CreateBuilderDialog(Project project,
-                               String title,
-                               PsiClass sourceClass,
-                               String targetClassName,
-                               String methodPrefix,
-                               PsiPackage targetPackage,
-                               PsiHelper psiHelper,
-                               GuiHelper guiHelper,
-                               ReferenceEditorComboWithBrowseButtonFactory referenceEditorComboWithBrowseButtonFactory) {
+    public CreateMakerDialog(Project project,
+                             String title,
+                             PsiClass sourceClass,
+                             String targetClassName,
+                             String methodPrefix,
+                             PsiPackage targetPackage,
+                             PsiHelper psiHelper,
+                             GuiHelper guiHelper,
+                             ReferenceEditorComboWithBrowseButtonFactory referenceEditorComboWithBrowseButtonFactory) {
         super(project, true);
         this.psiHelper = psiHelper;
         this.guiHelper = guiHelper;

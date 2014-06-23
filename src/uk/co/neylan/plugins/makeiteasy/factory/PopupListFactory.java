@@ -1,7 +1,7 @@
-package pl.mjedynak.idea.plugins.builder.factory;
+package uk.co.neylan.plugins.makeiteasy.factory;
 
 import com.intellij.ui.components.JBList;
-import pl.mjedynak.idea.plugins.builder.action.GoToBuilderAdditionalAction;
+import uk.co.neylan.plugins.makeiteasy.action.GoToMakerAdditionalAction;
 import pl.mjedynak.idea.plugins.builder.renderer.ActionCellRenderer;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ public class PopupListFactory {
 
     @SuppressWarnings("unchecked")
     public JList getPopupList() {
-        JList list = new JBList(Arrays.asList(new GoToBuilderAdditionalAction()));
+        JList list = new JBList(Arrays.asList(new GoToMakerAdditionalAction()));
         list.setCellRenderer(actionCellRenderer);
         return list;
     }

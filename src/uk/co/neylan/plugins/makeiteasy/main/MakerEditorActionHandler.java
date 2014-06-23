@@ -8,34 +8,34 @@ import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import org.jetbrains.annotations.Nullable;
-import pl.mjedynak.idea.plugins.builder.action.handler.DisplayChoosersRunnable;
-import pl.mjedynak.idea.plugins.builder.factory.PopupListFactory;
-import pl.mjedynak.idea.plugins.builder.finder.BuilderFinder;
+import uk.co.neylan.plugins.makeiteasy.action.handler.DisplayChoosersRunnable;
+import uk.co.neylan.plugins.makeiteasy.factory.PopupListFactory;
+import uk.co.neylan.plugins.makeiteasy.finder.MakerFinder;
 import pl.mjedynak.idea.plugins.builder.gui.displayer.PopupDisplayer;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
-import pl.mjedynak.idea.plugins.builder.verifier.BuilderVerifier;
+import uk.co.neylan.plugins.makeiteasy.verifier.MakerVerifier;
 
 import javax.swing.*;
 
 class MakerEditorActionHandler extends EditorActionHandler {
     private PsiHelper psiHelper;
-    private BuilderVerifier builderVerifier;
+    private MakerVerifier makerVerifier;
     private PopupListFactory popupListFactory;
     private PopupDisplayer popupDisplayer;
-    private BuilderFinder builderFinder;
+    private MakerFinder makerFinder;
     private DisplayChoosersRunnable displayChoosersRunnable;
 
     public MakerEditorActionHandler(PsiHelper psiHelper,
-                                    BuilderVerifier builderVerifier,
+                                    MakerVerifier makerVerifier,
                                     PopupListFactory popupListFactory,
                                     PopupDisplayer popupDisplayer,
-                                    BuilderFinder builderFinder,
+                                    MakerFinder makerFinder,
                                     DisplayChoosersRunnable displayChoosersRunnable) {
         this.psiHelper = psiHelper;
-        this.builderVerifier = builderVerifier;
+        this.makerVerifier = makerVerifier;
         this.popupListFactory = popupListFactory;
         this.popupDisplayer = popupDisplayer;
-        this.builderFinder = builderFinder;
+        this.makerFinder = makerFinder;
         this.displayChoosersRunnable = displayChoosersRunnable;
     }
 
@@ -49,11 +49,11 @@ class MakerEditorActionHandler extends EditorActionHandler {
     }
 
     private void navigateOrDisplay(Editor editor, PsiClass psiClassFromEditor, DataContext dataContext) {
-        boolean isBuilder = builderVerifier.isBuilder(psiClassFromEditor);
-        PsiClass classToGo = findClassToGo(psiClassFromEditor, isBuilder);
+        boolean isMaker = makerVerifier.isMaker(psiClassFromEditor);
+        PsiClass classToGo = findClassToGo(psiClassFromEditor, isMaker);
         if (classToGo != null) {
             psiHelper.navigateToClass(classToGo);
-        } else if (!isBuilder) {
+        } else if (!isMaker) {
             displayPopup(editor, psiClassFromEditor, dataContext);
         }
     }
@@ -67,10 +67,10 @@ class MakerEditorActionHandler extends EditorActionHandler {
         popupDisplayer.displayPopupChooser(editor, popupList, displayChoosersRunnable);
     }
 
-    private PsiClass findClassToGo(PsiClass psiClassFromEditor, boolean isBuilder) {
-        if (isBuilder) {
-            return builderFinder.findClassForBuilder(psiClassFromEditor);
+    private PsiClass findClassToGo(PsiClass psiClassFromEditor, boolean isMaker) {
+        if (isMaker) {
+            return makerFinder.findClassForMaker(psiClassFromEditor);
         }
-        return builderFinder.findBuilderForClass(psiClassFromEditor);
+        return makerFinder.findMakerForClass(psiClassFromEditor);
     }
 }

@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class PopupDisplayer {
 
-    static final String TITLE = "Builder not found";
+    static final String TITLE = "Maker not found";
 
     private PopupChooserBuilderFactory popupChooserBuilderFactory;
 

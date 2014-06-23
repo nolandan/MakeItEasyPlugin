@@ -1,24 +1,25 @@
-package pl.mjedynak.idea.plugins.builder.finder;
+package uk.co.neylan.plugins.makeiteasy.finder;
 
 import com.intellij.psi.PsiClass;
+import pl.mjedynak.idea.plugins.builder.finder.ClassFinder;
 
-public class BuilderFinder {
+public class MakerFinder {
 
-    static final String SEARCH_PATTERN = "Builder";
+    static final String SEARCH_PATTERN = "Maker";
     public static final String EMPTY_STRING = "";
 
     private ClassFinder classFinder;
 
-    public BuilderFinder(ClassFinder classFinder) {
+    public MakerFinder(ClassFinder classFinder) {
         this.classFinder = classFinder;
     }
 
-    public PsiClass findBuilderForClass(PsiClass psiClass) {
+    public PsiClass findMakerForClass(PsiClass psiClass) {
         String searchName = psiClass.getName() + SEARCH_PATTERN;
         return findClass(psiClass, searchName);
     }
 
-    public PsiClass findClassForBuilder(PsiClass psiClass) {
+    public PsiClass findClassForMaker(PsiClass psiClass) {
         String searchName = psiClass.getName().replaceFirst(SEARCH_PATTERN, EMPTY_STRING);
         return findClass(psiClass, searchName);
     }

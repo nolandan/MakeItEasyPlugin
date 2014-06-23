@@ -1,24 +1,25 @@
-package pl.mjedynak.idea.plugins.builder.factory;
+package uk.co.neylan.plugins.makeiteasy.factory;
 
 import com.intellij.codeInsight.generation.PsiElementClassMember;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
-import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForBuilder;
+import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
 import pl.mjedynak.idea.plugins.builder.verifier.PsiFieldVerifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PsiFieldsForBuilderFactory {
+public class PsiFieldsForMakerFactory {
 
     private PsiFieldVerifier psiFieldVerifier;
 
-    public PsiFieldsForBuilderFactory(PsiFieldVerifier psiFieldVerifier) {
+    public PsiFieldsForMakerFactory(PsiFieldVerifier psiFieldVerifier) {
         this.psiFieldVerifier = psiFieldVerifier;
     }
 
-    public PsiFieldsForBuilder createPsiFieldsForBuilder(List<PsiElementClassMember> psiElementClassMembers, PsiClass psiClass) {
+    public PsiFieldsForMaker createPsiFieldsForMaker(List<PsiElementClassMember> psiElementClassMembers,
+                                                     PsiClass psiClass) {
         List<PsiField> psiFieldsForSetters = new ArrayList<PsiField>();
         List<PsiField> psiFieldsForConstructor = new ArrayList<PsiField>();
         for (PsiElementClassMember psiElementClassMember : psiElementClassMembers) {
@@ -31,6 +32,6 @@ public class PsiFieldsForBuilderFactory {
                 }
             }
         }
-        return new PsiFieldsForBuilder(psiFieldsForSetters, psiFieldsForConstructor);
+        return new PsiFieldsForMaker(psiFieldsForSetters, psiFieldsForConstructor);
     }
 }

@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.factory;
+package uk.co.neylan.plugins.makeiteasy.factory;
 
 import com.intellij.codeInsight.generation.PsiElementClassMember;
 import com.intellij.ide.util.MemberChooser;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MemberChooserDialogFactory {
 
-    static final String TITLE = "Select Fields to Be Available in Builder";
+    static final String TITLE = "Select Fields to Be Available in Maker";
 
     public MemberChooser<PsiElementClassMember> getMemberChooserDialog(List<PsiElementClassMember> elements, Project project) {
         PsiElementClassMember[] psiElementClassMembers = elements.toArray(new PsiElementClassMember[elements.size()]);

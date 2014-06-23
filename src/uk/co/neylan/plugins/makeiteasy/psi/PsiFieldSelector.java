@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.psi;
+package uk.co.neylan.plugins.makeiteasy.psi;
 
 import com.google.common.base.Predicate;
 import com.intellij.codeInsight.generation.PsiElementClassMember;
@@ -23,7 +23,7 @@ public class PsiFieldSelector {
         this.psiFieldVerifier = psiFieldVerifier;
     }
 
-    public List<PsiElementClassMember> selectFieldsToIncludeInBuilder(final PsiClass psiClass) {
+    public List<PsiElementClassMember> selectFieldsToIncludeInMaker(final PsiClass psiClass) {
         List<PsiElementClassMember> result = new ArrayList<PsiElementClassMember>();
         List<PsiField> psiFields = Arrays.asList(psiClass.getAllFields());
         Iterable<PsiField> filtered = filter(psiFields, new Predicate<PsiField>() {

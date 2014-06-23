@@ -1,4 +1,4 @@
-package pl.mjedynak.idea.plugins.builder.gui;
+package uk.co.neylan.plugins.makeiteasy.gui;
 
 import com.intellij.CommonBundle;
 import com.intellij.openapi.module.Module;
@@ -11,7 +11,7 @@ import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 
 public class OKActionRunnable implements Runnable {
 
-    private CreateBuilderDialog createBuilderDialog;
+    private CreateMakerDialog createMakerDialog;
     private PsiHelper psiHelper;
     private GuiHelper guiHelper;
     private Project project;
@@ -19,8 +19,8 @@ public class OKActionRunnable implements Runnable {
     private String packageName;
     private String className;
 
-    public OKActionRunnable(CreateBuilderDialog createBuilderDialog, PsiHelper psiHelper, GuiHelper guiHelper, Project project, Module module, String packageName, String className) {
-        this.createBuilderDialog = createBuilderDialog;
+    public OKActionRunnable(CreateMakerDialog createMakerDialog, PsiHelper psiHelper, GuiHelper guiHelper, Project project, Module module, String packageName, String className) {
+        this.createMakerDialog = createMakerDialog;
         this.psiHelper = psiHelper;
         this.guiHelper = guiHelper;
         this.project = project;
@@ -35,7 +35,7 @@ public class OKActionRunnable implements Runnable {
         try {
             PsiDirectory targetDirectory = psiHelper.getDirectoryFromModuleAndPackageName(module, packageName);
             if (targetDirectory != null) {
-                createBuilderDialog.setTargetDirectory(targetDirectory);
+                createMakerDialog.setTargetDirectory(targetDirectory);
                 errorString = psiHelper.checkIfClassCanBeCreated(targetDirectory, className);
             }
         } catch (IncorrectOperationException e) {
