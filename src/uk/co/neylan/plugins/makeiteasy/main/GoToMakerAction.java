@@ -1,24 +1,24 @@
 package uk.co.neylan.plugins.makeiteasy.main;
 
 import com.intellij.openapi.editor.actionSystem.EditorAction;
-import uk.co.neylan.plugins.makeiteasy.action.handler.DisplayChoosersRunnable;
-import uk.co.neylan.plugins.makeiteasy.factory.CreateMakerDialogFactory;
-import uk.co.neylan.plugins.makeiteasy.factory.MemberChooserDialogFactory;
 import pl.mjedynak.idea.plugins.builder.factory.PopupChooserBuilderFactory;
-import uk.co.neylan.plugins.makeiteasy.factory.PopupListFactory;
 import pl.mjedynak.idea.plugins.builder.factory.PsiElementClassMemberFactory;
-import uk.co.neylan.plugins.makeiteasy.factory.PsiFieldsForMakerFactory;
 import pl.mjedynak.idea.plugins.builder.factory.ReferenceEditorComboWithBrowseButtonFactory;
-import uk.co.neylan.plugins.makeiteasy.writer.MakerWriter;
-import uk.co.neylan.plugins.makeiteasy.finder.MakerFinder;
 import pl.mjedynak.idea.plugins.builder.finder.ClassFinder;
 import pl.mjedynak.idea.plugins.builder.gui.displayer.PopupDisplayer;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
-import uk.co.neylan.plugins.makeiteasy.psi.BuilderPsiClassBuilder;
-import uk.co.neylan.plugins.makeiteasy.psi.PsiFieldSelector;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
-import uk.co.neylan.plugins.makeiteasy.verifier.MakerVerifier;
 import pl.mjedynak.idea.plugins.builder.verifier.PsiFieldVerifier;
+import uk.co.neylan.plugins.makeiteasy.action.handler.DisplayChoosersRunnable;
+import uk.co.neylan.plugins.makeiteasy.factory.CreateMakerDialogFactory;
+import uk.co.neylan.plugins.makeiteasy.factory.MemberChooserDialogFactory;
+import uk.co.neylan.plugins.makeiteasy.factory.PopupListFactory;
+import uk.co.neylan.plugins.makeiteasy.factory.PsiFieldsForMakerFactory;
+import uk.co.neylan.plugins.makeiteasy.finder.MakerFinder;
+import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
+import uk.co.neylan.plugins.makeiteasy.psi.PsiFieldSelector;
+import uk.co.neylan.plugins.makeiteasy.verifier.MakerVerifier;
+import uk.co.neylan.plugins.makeiteasy.writer.MakerWriter;
 
 public class GoToMakerAction extends EditorAction {
 
@@ -28,13 +28,14 @@ public class GoToMakerAction extends EditorAction {
         PsiHelper psiHelper = new PsiHelper();
         GuiHelper guiHelper = new GuiHelper();
         PsiFieldVerifier psiFieldVerifier = new PsiFieldVerifier();
+        ClassFinder classFinder = new ClassFinder(psiHelper);
 
         handler = new MakerEditorActionHandler(
                 psiHelper,
                 new MakerVerifier(),
                 new PopupListFactory(),
                 new PopupDisplayer(new PopupChooserBuilderFactory()),
-                new MakerFinder(new ClassFinder(psiHelper)),
+                new MakerFinder(classFinder),
                 new DisplayChoosersRunnable(
                         psiHelper,
                         new CreateMakerDialogFactory(
@@ -48,7 +49,7 @@ public class GoToMakerAction extends EditorAction {
                         ),
                         new MemberChooserDialogFactory(),
                         new MakerWriter(
-                                new BuilderPsiClassBuilder(psiHelper),
+                                new MakerPsiClassBuilder(psiHelper, classFinder),
                                 psiHelper,
                                 guiHelper),
                         new PsiFieldsForMakerFactory(psiFieldVerifier)));

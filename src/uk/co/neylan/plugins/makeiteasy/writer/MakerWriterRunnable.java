@@ -5,14 +5,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
-import uk.co.neylan.plugins.makeiteasy.psi.BuilderPsiClassBuilder;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
-import uk.co.neylan.plugins.makeiteasy.writer.BuilderWriterComputable;
+import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
 
-public class BuilderWriterRunnable implements Runnable {
+public class MakerWriterRunnable implements Runnable {
 
-    private BuilderPsiClassBuilder builderPsiClassBuilder;
+    private MakerPsiClassBuilder makerPsiClassBuilder;
     private Project project;
     private PsiFieldsForMaker psiFieldsForMaker;
     private PsiDirectory targetDirectory;
@@ -22,9 +21,16 @@ public class BuilderWriterRunnable implements Runnable {
     private GuiHelper guiHelper;
     private String methodPrefix;
 
-    public BuilderWriterRunnable(BuilderPsiClassBuilder builderPsiClassBuilder, Project project, PsiFieldsForMaker psiFieldsForMaker,
-                                 PsiDirectory targetDirectory, String className, PsiClass psiClassFromEditor, PsiHelper psiHelper, GuiHelper guiHelper, String methodPrefix) {
-        this.builderPsiClassBuilder = builderPsiClassBuilder;
+    public MakerWriterRunnable(MakerPsiClassBuilder makerPsiClassBuilder,
+                               Project project,
+                               PsiFieldsForMaker psiFieldsForMaker,
+                               PsiDirectory targetDirectory,
+                               String className,
+                               PsiClass psiClassFromEditor,
+                               PsiHelper psiHelper,
+                               GuiHelper guiHelper,
+                               String methodPrefix) {
+        this.makerPsiClassBuilder = makerPsiClassBuilder;
         this.project = project;
         this.psiFieldsForMaker = psiFieldsForMaker;
         this.targetDirectory = targetDirectory;
@@ -38,7 +44,7 @@ public class BuilderWriterRunnable implements Runnable {
     @Override
     public void run() {
         Application application = psiHelper.getApplication();
-        application.runWriteAction(new BuilderWriterComputable(builderPsiClassBuilder, project,
+        application.runWriteAction(new MakerWriterComputable(makerPsiClassBuilder, project,
                 psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, methodPrefix));
     }
 }

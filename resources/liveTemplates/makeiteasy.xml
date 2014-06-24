@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Maker">
+    <template id="makeiteasy" name="make" description="make"
+              value="com.natpryce.makeiteasy.MakeItEasy.make(com.natpryce.makeiteasy.MakeItEasy.a($SELECTION$$END$))"
+              toReformat="true" toShortenFQNames="true" >
+        <context>
+            <option name="JAVA_CODE" value="false" />
+            <option name="JAVA_STATEMENT" value="true" />
+            <option name="JAVA_DECLARATION" value="true" />
+            <option name="JAVA_EXPRESSION" value="true" />
+        </context>
+    </template>
+</templateSet>

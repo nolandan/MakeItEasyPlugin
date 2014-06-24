@@ -5,20 +5,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
-import uk.co.neylan.plugins.makeiteasy.psi.BuilderPsiClassBuilder;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
-import uk.co.neylan.plugins.makeiteasy.writer.BuilderWriterRunnable;
+import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
 
 public class MakerWriter {
 
     static final String CREATE_MAKER_STRING = "Create Maker";
-    private BuilderPsiClassBuilder builderPsiClassBuilder;
+    private MakerPsiClassBuilder makerPsiClassBuilder;
     private PsiHelper psiHelper;
     private GuiHelper guiHelper;
 
-    public MakerWriter(BuilderPsiClassBuilder builderPsiClassBuilder, PsiHelper psiHelper, GuiHelper guiHelper) {
-        this.builderPsiClassBuilder = builderPsiClassBuilder;
+    public MakerWriter(MakerPsiClassBuilder makerPsiClassBuilder, PsiHelper psiHelper, GuiHelper guiHelper) {
+        this.makerPsiClassBuilder = makerPsiClassBuilder;
         this.psiHelper = psiHelper;
         this.guiHelper = guiHelper;
     }
@@ -31,7 +30,7 @@ public class MakerWriter {
                            String methodPrefix) {
         CommandProcessor commandProcessor = psiHelper.getCommandProcessor();
         commandProcessor.executeCommand(project,
-                new BuilderWriterRunnable(builderPsiClassBuilder, project,
+                new MakerWriterRunnable(makerPsiClassBuilder, project,
                         psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, methodPrefix),
                 CREATE_MAKER_STRING, this);
     }

@@ -8,13 +8,13 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
-import uk.co.neylan.plugins.makeiteasy.psi.BuilderPsiClassBuilder;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
+import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
 
-public class BuilderWriterComputable implements Computable<PsiElement> {
+public class MakerWriterComputable implements Computable<PsiElement> {
 
-    private BuilderPsiClassBuilder builderPsiClassBuilder;
+    private MakerPsiClassBuilder makerPsiClassBuilder;
     private Project project;
     private PsiFieldsForMaker psiFieldsForMaker;
     private PsiDirectory targetDirectory;
@@ -24,10 +24,16 @@ public class BuilderWriterComputable implements Computable<PsiElement> {
     private PsiHelper psiHelper;
     private String methodPrefix;
 
-    public BuilderWriterComputable(BuilderPsiClassBuilder builderPsiClassBuilder, Project project, PsiFieldsForMaker psiFieldsForMaker,
-                                   PsiDirectory targetDirectory, String className, PsiClass psiClassFromEditor, PsiHelper psiHelper, GuiHelper guiHelper,
-                                   String methodPrefix) {
-        this.builderPsiClassBuilder = builderPsiClassBuilder;
+    public MakerWriterComputable(MakerPsiClassBuilder makerPsiClassBuilder,
+                                 Project project,
+                                 PsiFieldsForMaker psiFieldsForMaker,
+                                 PsiDirectory targetDirectory,
+                                 String className,
+                                 PsiClass psiClassFromEditor,
+                                 PsiHelper psiHelper,
+                                 GuiHelper guiHelper,
+                                 String methodPrefix) {
+        this.makerPsiClassBuilder = makerPsiClassBuilder;
         this.project = project;
         this.psiFieldsForMaker = psiFieldsForMaker;
         this.targetDirectory = targetDirectory;
@@ -59,12 +65,9 @@ public class BuilderWriterComputable implements Computable<PsiElement> {
     }
 
     private PsiClass getBuilderPsiClass(Project project, PsiFieldsForMaker psiFieldsForMaker, PsiDirectory targetDirectory, String className, PsiClass psiClassFromEditor, String methodPrefix) {
-        BuilderPsiClassBuilder builder = builderPsiClassBuilder.aBuilder(project, targetDirectory, psiClassFromEditor, className,
+        MakerPsiClassBuilder builder = makerPsiClassBuilder.aBuilder(project, targetDirectory, psiClassFromEditor, className,
                 psiFieldsForMaker)
-                .withFields()
-                .withPrivateConstructor()
-                .withInitializingMethod()
-                .withSetMethods(methodPrefix);
+                .withFields();
         return builder.build();
     }
 
@@ -74,6 +77,6 @@ public class BuilderWriterComputable implements Computable<PsiElement> {
 
     private void showErrorMessage(Project project, String className) {
         Application application = psiHelper.getApplication();
-        application.invokeLater(new BuilderWriterErrorRunnable(project, className));
+        application.invokeLater(new MakerWriterErrorRunnable(project, className));
     }
 }

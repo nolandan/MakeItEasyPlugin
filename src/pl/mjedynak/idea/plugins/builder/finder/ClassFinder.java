@@ -23,6 +23,15 @@ public class ClassFinder {
         return result;
     }
 
+    public PsiClass findClassGlobally(String pattern, Project project) {
+        PsiClass result;
+        GlobalSearchScope projectScope = GlobalSearchScope.allScope(project);
+        PsiShortNamesCache psiShortNamesCache = psiHelper.getPsiShortNamesCache(project);
+        PsiClass[] classesArray = psiShortNamesCache.getClassesByName(pattern, projectScope);
+        result = getPsiClass(classesArray);
+        return result;
+    }
+
     private PsiClass getPsiClass(PsiClass[] classesArray) {
         return (classesArray != null && classesArray.length != 0) ? classesArray[0] : null;
     }
