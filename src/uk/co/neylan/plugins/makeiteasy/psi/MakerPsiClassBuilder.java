@@ -14,11 +14,13 @@ import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.util.text.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 import pl.mjedynak.idea.plugins.builder.finder.ClassFinder;
 import pl.mjedynak.idea.plugins.builder.psi.MethodNameCreator;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
+import uk.co.neylan.plugins.makeiteasy.model.PropertyCase;
 
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class MakerPsiClassBuilder {
     private PsiDirectory targetDirectory = null;
     private PsiClass srcClass = null;
     private String builderClassName = null;
+    private PropertyCase propertyCase;
 
     private List<PsiField> psiFieldsForSetters = null;
     private List<PsiField> psiFieldsForConstructor = null;
@@ -58,11 +61,13 @@ public class MakerPsiClassBuilder {
                                          PsiDirectory targetDirectory,
                                          PsiClass psiClass,
                                          String builderClassName,
-                                         PsiFieldsForMaker psiFieldsForMaker) {
+                                         PsiFieldsForMaker psiFieldsForMaker,
+                                         PropertyCase propertyCase) {
         this.project = project;
         this.targetDirectory = targetDirectory;
         this.srcClass = psiClass;
         this.builderClassName = builderClassName;
+        this.propertyCase = propertyCase;
         JavaDirectoryService javaDirectoryService = psiHelper.getJavaDirectoryService();
         builderClass = javaDirectoryService.createClass(targetDirectory, builderClassName);
         JavaPsiFacade javaPsiFacade = psiHelper.getJavaPsiFacade(project);
@@ -80,6 +85,7 @@ public class MakerPsiClassBuilder {
         if (containingFile instanceof PsiImportHolder) {
             addImport(project, javaPsiFacade, (PsiImportHolder) containingFile, "com.natpryce.makeiteasy.Property");
             addImport(project, javaPsiFacade, (PsiImportHolder) containingFile, "com.natpryce.makeiteasy.Instantiator");
+            addImport(project, javaPsiFacade, (PsiImportHolder) containingFile, "com.natpryce.makeiteasy.PropertyLookup");
         }
     }
 
@@ -111,11 +117,19 @@ public class MakerPsiClassBuilder {
         String fieldType = getFieldType(psiField);
 
         PsiField field = elementFactory.createFieldFromText(
-                "public static final com.natpryce.makeiteasy.Property<" + srcClassName + ", " + fieldType + "> " + fieldName + " = com.natpryce.makeiteasy.Property.newProperty();",
+                "public static final Property<" + srcClassName + ", " + fieldType + "> " + getPropertyName(
+                        fieldName) + " = Property.newProperty();",
                 psiField
         );
 
         builderClass.add(field);
+    }
+
+    private String getPropertyName(String fieldName) {
+        if (propertyCase.equals(PropertyCase.UPPERCASE)) {
+            new StringTokenizer(fieldName);
+        }
+        return fieldName;
     }
 
     private String getFieldType(PsiField psiField) {
@@ -135,11 +149,11 @@ public class MakerPsiClassBuilder {
         StringBuilder buildInstantiateField = new StringBuilder();
         String constructorParameters = createConstructorParameters();
         buildInstantiateField
-                .append("public static com.natpryce.makeiteasy.Instantiator<").append(srcClassName).append("> ")
+                .append("public static Instantiator<").append(srcClassName).append("> ")
                 .append(srcClassFieldName)
-                .append(" = new com.natpryce.makeiteasy.Instantiator<").append(srcClassName).append(">")
+                .append(" = new Instantiator<").append(srcClassName).append(">")
                 .append(" () { ").append("@Override\n" + "        public ").append(srcClassName).append(
-                " instantiate(com.natpryce.makeiteasy.PropertyLookup<").append(srcClassName).append("> lookup) {")
+                " instantiate(PropertyLookup<").append(srcClassName).append("> lookup) {")
                 .append(srcClassName).append(SPACE)
                 .append(srcClassFieldName).append(" = new ").append(srcClassName).append("(").append(
                 constructorParameters).append(");");
@@ -152,14 +166,14 @@ public class MakerPsiClassBuilder {
         }
         buildInstantiateField.append("return ").append(srcClassFieldName).append(";}").append("};");
         PsiField makerField = elementFactory.createFieldFromText(buildInstantiateField.toString(), srcClass);
+//        makerField.getNode().
+//        builderClass.getContainingFile().getNode().addChild(ASTFactory.whitespace("\n"));
         builderClass.add(makerField);
         return builderClass;
     }
 
     private String getFieldNameLookup(String fieldName, PsiType type) {
-
         return "lookup.valueOf(" + fieldName + ", " + deriveType(type) + ")";
-//        " + type.getPresentableText() + ")null)";
     }
 
     private String deriveType(PsiType type) {

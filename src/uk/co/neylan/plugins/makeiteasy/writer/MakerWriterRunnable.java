@@ -7,6 +7,7 @@ import com.intellij.psi.PsiDirectory;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
+import uk.co.neylan.plugins.makeiteasy.model.PropertyCase;
 import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
 
 public class MakerWriterRunnable implements Runnable {
@@ -19,7 +20,7 @@ public class MakerWriterRunnable implements Runnable {
     private PsiClass psiClassFromEditor;
     private PsiHelper psiHelper;
     private GuiHelper guiHelper;
-    private String methodPrefix;
+    private PropertyCase propertyCase;
 
     public MakerWriterRunnable(MakerPsiClassBuilder makerPsiClassBuilder,
                                Project project,
@@ -29,7 +30,7 @@ public class MakerWriterRunnable implements Runnable {
                                PsiClass psiClassFromEditor,
                                PsiHelper psiHelper,
                                GuiHelper guiHelper,
-                               String methodPrefix) {
+                               PropertyCase propertyCase) {
         this.makerPsiClassBuilder = makerPsiClassBuilder;
         this.project = project;
         this.psiFieldsForMaker = psiFieldsForMaker;
@@ -38,13 +39,13 @@ public class MakerWriterRunnable implements Runnable {
         this.psiClassFromEditor = psiClassFromEditor;
         this.psiHelper = psiHelper;
         this.guiHelper = guiHelper;
-        this.methodPrefix = methodPrefix;
+        this.propertyCase = propertyCase;
     }
 
     @Override
     public void run() {
         Application application = psiHelper.getApplication();
         application.runWriteAction(new MakerWriterComputable(makerPsiClassBuilder, project,
-                psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, methodPrefix));
+                psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, propertyCase));
     }
 }

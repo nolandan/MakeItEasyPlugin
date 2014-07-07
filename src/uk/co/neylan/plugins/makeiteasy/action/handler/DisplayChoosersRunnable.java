@@ -7,14 +7,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiPackage;
+import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
+import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
 import uk.co.neylan.plugins.makeiteasy.factory.CreateMakerDialogFactory;
 import uk.co.neylan.plugins.makeiteasy.factory.MemberChooserDialogFactory;
 import uk.co.neylan.plugins.makeiteasy.factory.PsiFieldsForMakerFactory;
 import uk.co.neylan.plugins.makeiteasy.gui.CreateMakerDialog;
-import uk.co.neylan.plugins.makeiteasy.writer.MakerWriter;
+import uk.co.neylan.plugins.makeiteasy.model.PropertyCase;
 import uk.co.neylan.plugins.makeiteasy.psi.PsiFieldSelector;
-import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
-import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
+import uk.co.neylan.plugins.makeiteasy.writer.MakerWriter;
 
 import java.util.List;
 
@@ -49,24 +50,24 @@ public class DisplayChoosersRunnable implements Runnable {
         if (createMakerDialog.isOK()) {
             PsiDirectory targetDirectory = createMakerDialog.getTargetDirectory();
             String className = createMakerDialog.getClassName();
-            String methodPrefix = createMakerDialog.getMethodPrefix();
+            PropertyCase propertyCase = createMakerDialog.getPropertyCase();
             List<PsiElementClassMember> fieldsToDisplay = getFieldsToIncludeInMaker(psiClassFromEditor);
             MemberChooser<PsiElementClassMember> memberChooserDialog = memberChooserDialogFactory.getMemberChooserDialog(fieldsToDisplay, project);
             memberChooserDialog.show();
-            writeMakerIfNecessary(targetDirectory, className, methodPrefix, memberChooserDialog);
+            writeMakerIfNecessary(targetDirectory, className, propertyCase, memberChooserDialog);
         }
     }
 
     private void writeMakerIfNecessary(PsiDirectory targetDirectory,
                                        String className,
-                                       String methodPrefix,
+                                       PropertyCase propertyCase,
                                        MemberChooser<PsiElementClassMember> memberChooserDialog) {
         if (memberChooserDialog.isOK()) {
             List<PsiElementClassMember> selectedElements = memberChooserDialog.getSelectedElements();
             PsiFieldsForMaker psiFieldsForMaker = psiFieldsForMakerFactory.createPsiFieldsForMaker(selectedElements,
                     psiClassFromEditor);
             makerWriter.writeMaker(project,
-                    psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, methodPrefix);
+                    psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, propertyCase);
         }
     }
 

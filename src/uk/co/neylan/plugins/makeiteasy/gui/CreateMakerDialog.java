@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -21,6 +22,7 @@ import pl.mjedynak.idea.plugins.builder.factory.ReferenceEditorComboWithBrowseBu
 import pl.mjedynak.idea.plugins.builder.gui.ChooserDisplayerActionListener;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
+import uk.co.neylan.plugins.makeiteasy.model.PropertyCase;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -40,14 +42,13 @@ public class CreateMakerDialog extends DialogWrapper {
     private PsiDirectory targetDirectory;
     private PsiClass sourceClass;
     private JTextField targetClassNameField;
-    private JTextField targetMethodPrefix;
+    private ComboBox propertyCaseField;
     private ReferenceEditorComboWithBrowseButton targetPackageField;
 
     public CreateMakerDialog(Project project,
                              String title,
                              PsiClass sourceClass,
                              String targetClassName,
-                             String methodPrefix,
                              PsiPackage targetPackage,
                              PsiHelper psiHelper,
                              GuiHelper guiHelper,
@@ -58,9 +59,15 @@ public class CreateMakerDialog extends DialogWrapper {
         this.project = project;
         this.sourceClass = sourceClass;
         targetClassNameField = new JTextField(targetClassName);
-        targetMethodPrefix = new JTextField(methodPrefix);
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        for (PropertyCase propertyCase : PropertyCase.values()) {
+            model.addElement(propertyCase.getDisplayText());
+        }
+        propertyCaseField = new ComboBox(model);
         setPreferredSize(targetClassNameField);
-        setPreferredSize(targetMethodPrefix);
+        setPreferredSize(propertyCaseField);
+//        propertyCaseField.setEditable(false);
+        propertyCaseField.setEnabled(false);
 
         String targetPackageName = (targetPackage != null) ? targetPackage.getQualifiedName() : "";
         targetPackageField = referenceEditorComboWithBrowseButtonFactory.getReferenceEditorComboWithBrowseButton(project, targetPackageName, RECENTS_KEY);
@@ -74,7 +81,7 @@ public class CreateMakerDialog extends DialogWrapper {
         super.show();
     }
 
-    private void setPreferredSize(JTextField field) {
+    private void setPreferredSize(JComponent field) {
         Dimension size = field.getPreferredSize();
         FontMetrics fontMetrics = field.getFontMetrics(field.getFont());
         size.width = fontMetrics.charWidth('a') * WIDTH;
@@ -114,7 +121,7 @@ public class CreateMakerDialog extends DialogWrapper {
         gbConstraints.gridwidth = 1;
         gbConstraints.fill = GridBagConstraints.HORIZONTAL;
         gbConstraints.anchor = GridBagConstraints.WEST;
-        panel.add(new JLabel("Method prefix"), gbConstraints);
+        panel.add(new JLabel("Property case"), gbConstraints);
 
         gbConstraints.insets = new Insets(4, 8, 4, 8);
         gbConstraints.gridx = 1;
@@ -122,7 +129,7 @@ public class CreateMakerDialog extends DialogWrapper {
         gbConstraints.gridwidth = 1;
         gbConstraints.fill = GridBagConstraints.HORIZONTAL;
         gbConstraints.anchor = GridBagConstraints.WEST;
-        panel.add(targetMethodPrefix, gbConstraints);
+        panel.add(propertyCaseField, gbConstraints);
 
         targetClassNameField.getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(DocumentEvent e) {
@@ -199,8 +206,12 @@ public class CreateMakerDialog extends DialogWrapper {
         return targetClassNameField.getText();
     }
 
-    public String getMethodPrefix() {
-        return targetMethodPrefix.getText();
+    public PropertyCase getPropertyCase() {
+        return resolve((String) propertyCaseField.getSelectedItem());
+    }
+
+    private PropertyCase resolve(String selectedItem) {
+        return PropertyCase.fromDisplayText(selectedItem);
     }
 
     public PsiDirectory getTargetDirectory() {

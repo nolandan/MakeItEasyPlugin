@@ -7,6 +7,7 @@ import com.intellij.psi.PsiDirectory;
 import pl.mjedynak.idea.plugins.builder.gui.helper.GuiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.PsiHelper;
 import pl.mjedynak.idea.plugins.builder.psi.model.PsiFieldsForMaker;
+import uk.co.neylan.plugins.makeiteasy.model.PropertyCase;
 import uk.co.neylan.plugins.makeiteasy.psi.MakerPsiClassBuilder;
 
 public class MakerWriter {
@@ -27,11 +28,11 @@ public class MakerWriter {
                            PsiDirectory targetDirectory,
                            String className,
                            PsiClass psiClassFromEditor,
-                           String methodPrefix) {
+                           PropertyCase propertyCase) {
         CommandProcessor commandProcessor = psiHelper.getCommandProcessor();
         commandProcessor.executeCommand(project,
                 new MakerWriterRunnable(makerPsiClassBuilder, project,
-                        psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, methodPrefix),
+                        psiFieldsForMaker, targetDirectory, className, psiClassFromEditor, psiHelper, guiHelper, propertyCase),
                 CREATE_MAKER_STRING, this);
     }
 }
